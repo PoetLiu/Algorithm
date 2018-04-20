@@ -25,10 +25,10 @@ int main(void)
 	printf("\n");
 
 	for (i = 0; i < ARRAY_SIZE_GET(data); i++) {
-		for (j = i; j < ARRAY_SIZE_GET(data); j++) {
-			if (data[i] > data[j]) {
-				tmp	= data[i];
-				data[i]	= data[j];
+		for (j = 0; j < ARRAY_SIZE_GET(data)-1-i; j++) {
+			if (data[j] > data[j+1]) {
+				tmp	= data[j+1];
+				data[j+1]	= data[j];
 				data[j]	= tmp;
 			}
 		}

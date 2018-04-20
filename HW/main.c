@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <ctype.h>
 #include "mylib.h"
 
 #define BUFFER_SIZE 4096
@@ -46,16 +47,15 @@ static char find_first_single_char(char *s, int _case)
 	return 0;
 }
 
-int main(void) 
+static char *read_one_line_stdin(void)
 {
-	char buffer[BUFFER_SIZE] = {0}, *s = calloc(1, 1), res = 0;
-	int _case = false, i = 0;
+	char buffer[BUFFER_SIZE] = {0}, *s = calloc(1, 1);
 
 	// read param
 	while (fgets(buffer, BUFFER_SIZE, stdin)) {
 		s	= realloc(s, strlen(s)+strlen(buffer)+1);
 		if (!s) {
-			return -1;
+			return NULL;
 		}
 		strcat(s, buffer);
 	}
@@ -63,6 +63,19 @@ int main(void)
 	// trim \n
 	if (s[strlen(s)-1] == '\n') {
 		s[strlen(s)-1]	= '\0';
+	}
+
+	return s;
+}
+
+int main(void) 
+{
+	char *s = NULL, res = 0;
+	int _case = false, i = 0;
+
+	s	= read_one_line_stdin();
+	if (!s) {
+		return -1;
 	}
 
 	// split
@@ -79,5 +92,9 @@ int main(void)
 
 	res	= find_first_single_char(s, _case);
 	printf("res:%c\n", res);
+
+	if (s) {
+		free(s);	
+	}
 	return 0;
 }
